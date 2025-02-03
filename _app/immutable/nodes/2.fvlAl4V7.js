@@ -1,0 +1,1 @@
+import{t as s,a}from"../chunks/B3TJolip.js";import"../chunks/DGEGzFwI.js";var v=s('<div class="container svelte-1c7635v"><h1 class="svelte-1c7635v">Welcome to UTOF.ME</h1> <p class="svelte-1c7635v">rwewreerwer</p> <p class="svelte-1c7635v">rew</p> <a href="./test" class="button svelte-1c7635v">Visit the Test Page</a></div>');function o(e){var t=v();a(e,t)}export{o as component};
