@@ -1,13 +1,15 @@
 import adapter from "@sveltejs/adapter-static";
 
-/** @type {import('@sveltejs/kit').Config} */
 const config = {
   kit: {
     adapter: adapter({
       fallback: "404.html",
     }),
     paths: {
-      base: process.argv.includes("dev") ? "" : process.env.BASE_PATH,
+      base: process.env.NODE_ENV === "development" ? "" : "/utofme2svelte", // <-- Ensure this matches your repo name
+    },
+    prerender: {
+      handleHttpError: "warn", // Suppress 404 errors when prerendering
     },
   },
 };
