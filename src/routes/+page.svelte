@@ -64,12 +64,11 @@
   <div class="container">
     <h1>Welcome to UTOF.ME</h1>
     <p>
-      Here at UTOF.ME, we take your code and turn it into something ridiculously awesome!
-      Expect slick design, witty vibes, and a dash of professional magic.
+      rwewreerwer
     </p>
     <p>
-      Because why settle for boring when you can have extraordinary fun?
+      rew
     </p>
-    <a href="/test" class="button">Visit the Test Page</a>
+    <a href="./test" class="button">Visit the Test Page</a>
   </div>
   
