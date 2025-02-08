@@ -62,3 +62,14 @@ Create a custom link tree alternative with a minimalist and modern look. The fir
 ---
 
 This document will evolve as the project progresses either by human(me) or AI copilot(you). For now, the main focus is getting the link tree cards working while keeping the project structure simple and fun.
+
+---
+
+To add to prompt:
+
+linktree:
+hardcoded links and files. Also create a structure + folder + placeholder svg files and import them
+Tailwind immediately. Initial static implementation but be very open for animation and future shenanigans like e.g. i want to animate borders, add sound effects on hover etc, events after clicking/tapping the link. The whole box/rectangle is a clickable (via hyperlink that is the text of the link). The whole link isnt displayed, only the username e.g. @hello
+
+general:
+when making commit messages, dont say e.g. "implement link card component with placeholders; update main page layout and add SVG assets", but shorten it e.g.: "init link card component w/ placeholders; update main page layout; add SVGs"

@@ -1,74 +1,16 @@
-<!-- <h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p> -->
-
 <script>
-    // No extra logic needed for now!
-  </script>
-  
-  <style>
-    /* Global body styles for a fun, vibrant background */
-    :global(body) {
-      margin: 0;
-      padding: 0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-  
-    .container {
-      text-align: center;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      max-width: 600px;
-    }
-  
-    h1 {
-      font-size: 3rem;
-      margin: 0 0 1rem;
-      animation: pop 0.8s ease-out;
-    }
-  
-    @keyframes pop {
-      0% { transform: scale(0); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-  
-    p {
-      font-size: 1.2rem;
-      margin: 1rem 0;
-      line-height: 1.5;
-    }
-  
-    a.button {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.8rem 1.6rem;
-      background: #0070f3;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 0.5rem;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-  
-    a.button:hover {
-      background: #005bb5;
-    }
-  </style>
-  
-  <div class="container">
-    <h1>Welcome to UTOF.ME</h1>
-    <p>
-      rwewreerwer
-    </p>
-    <p>
-      rew
-    </p>
-    <a href="./test" class="button">Visit the Test Page</a>
-  </div>
-  
+  import Card from '$lib/components/ui/card/Card.svelte';
+  import placeholder1 from '$lib/components/placeholder1.svg';
+  import placeholder2 from '$lib/components/placeholder2.svg';
+
+  const links = [
+    { logo: placeholder1, username: 'hello', link: 'https://lemreny.t.me' },
+    { logo: placeholder2, username: 'world', link: 'https://instagram.com/utofy' }
+  ];
+</script>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+  {#each links as { logo, username, link }}
+    <Card {logo} {username} {link} />
+  {/each}
+</div>
