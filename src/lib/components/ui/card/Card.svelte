@@ -19,6 +19,16 @@
     padding: 1rem; /* p-4 */
     color: black;
     transition: all 0.3s ease-in-out; /* transition-all duration-300 */
+    text-decoration: none;
+    margin: 1rem auto;
+    max-width: 90%;
+  }
+
+  @media (min-width: 640px) {
+    a {
+      max-width: 600px;
+      margin: 1rem auto;
+    }
   }
 
   a:hover {
@@ -34,5 +44,7 @@
 
   span {
     font-size: 1.125rem; /* text-lg */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 600;
   }
 </style>
