@@ -4,8 +4,8 @@
   export let link;
 </script>
 
-<a href={link} class="flex items-center bg-white border border-gray-300 rounded-lg p-4 text-black transition-all duration-300 hover:border-black hover:shadow-lg">
-  <img src={logo} alt="Logo" class="w-10 h-10 mr-4" />
+<a href={link}>
+  <img src={logo} alt="Logo" />
   <span class="text-lg">@{username}</span>
 </a>
 
@@ -13,12 +13,12 @@
   a {
     display: flex;
     align-items: center;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border: 1px solid #e5e7eb; /* gray-300 */
-    border-radius: 0.5rem; /* rounded-lg */
+    border-radius: 2rem; /* rounded-lg */
     padding: 1rem; /* p-4 */
-    color: black;
-    transition: all 0.3s ease-in-out; /* transition-all duration-300 */
+    color: rgb(44, 44, 44);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
     margin: 1rem auto;
     max-width: 90%;
@@ -32,7 +32,7 @@
   }
 
   a:hover {
-    border-color: black;
+    border-color: rgb(196, 196, 196);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* hover:shadow-lg */
   }
 
@@ -45,6 +45,6 @@
   span {
     font-size: 1.125rem; /* text-lg */
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 600;
+    font-weight: 300;
   }
 </style>
