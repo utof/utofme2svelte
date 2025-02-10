@@ -72,4 +72,6 @@ hardcoded links and files. Also create a structure + folder + placeholder svg fi
 Tailwind immediately. Initial static implementation but be very open for animation and future shenanigans like e.g. i want to animate borders, add sound effects on hover etc, events after clicking/tapping the link. The whole box/rectangle is a clickable (via hyperlink that is the text of the link). The whole link isnt displayed, only the username e.g. @hello
 
 general:
-when making commit messages, dont say e.g. "implement link card component with placeholders; update main page layout and add SVG assets", but shorten it e.g.: "init link card component w/ placeholders; update main page layout; add SVGs"
+
+1. when making commit messages, dont say e.g. "implement link card component with placeholders; update main page layout and add SVG assets", but shorten it e.g.: "init link card component w/ placeholders; update main page layout; add SVGs"
+2. when u see a todo in a file as a comment, ask the use whether to implement it. After the current task is done. If it is a big task, break it down into smaller tasks and implement them one by one. Delete the todo after the task has been implemented successfully without any issues in the command line or problems in vscode.

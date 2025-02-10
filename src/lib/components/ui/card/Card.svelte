@@ -1,3 +1,4 @@
+<!-- todo unsorted: make card horizontal width constant -->
 <script>
   export let logo;
   export let username;
@@ -5,7 +6,12 @@
 </script>
 
 <a href={link}>
-  <img src={logo} alt="Logo" />
+{#if typeof logo === 'string'} 
+    <img src={logo} alt="Logo" />
+{:else}
+<!-- i hate this ifelseness -->
+    <svelte:component this={logo} class="img" />
+{/if}
   <span class="text-lg">@{username}</span>
 </a>
 
