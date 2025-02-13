@@ -1,5 +1,9 @@
 # Personal Portfolio & Project Hub (SvelteKit)
 
+todo unsorted: why is the localhost loading up and reloading so slowly? What happened? it wasn't like that before.
+
+Todo longterm: add favicon.
+
 DATE: 2/8/2025. v1
 
 ## Overview

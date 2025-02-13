@@ -12,7 +12,7 @@
 <!-- i hate this ifelseness -->
     <svelte:component this={logo} class="img" />
 {/if}
-  <span class="text-lg">@{username}</span>
+  <span class="text-lg">{username}</span>
 </a>
 
 <style>

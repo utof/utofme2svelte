@@ -1,14 +1,14 @@
 <script>
   import Card from '$lib/components/ui/card/Card.svelte';
-  import telegram from '$lib/components/tg.svg';
-  import instagram from '$lib/components/ig.svg';
-  import { IconBrandSoundcloud } from '@tabler/icons-svelte';
+  import { IconBrandTelegram, IconBrandInstagram, IconBrandSoundcloud, IconHeart } from '@tabler/icons-svelte';
   import { fade } from 'svelte/transition';
 
   const links = [
-    { logo: telegram, username: 'utofy', link: 'https://utofy.t.me' },
-    { logo: instagram, username: 'utofy', link: 'https://instagram.com/utofy' },
-    { logo: IconBrandSoundcloud, username: 'utof', link: 'https://soundcloud.com/utof' },
+    { logo: IconBrandTelegram, username: '@utofy', link: 'https://utofy.t.me' },
+    {logo: IconBrandTelegram, username: '@alpoati - my telegram channel', link: 'https://alpoati.t.me'},
+    { logo: IconBrandInstagram, username: '@utofy', link: 'https://instagram.com/utofy' },
+    { logo: IconBrandSoundcloud, username: '@utof', link: 'https://soundcloud.com/utof' },
+    { logo: IconHeart, username: 'Support me on ko-fi!!', link: 'https://ko-fi.com/utofy' },
 
   ];
 </script>
