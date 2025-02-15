@@ -5,7 +5,7 @@
 
   const links = [
     { logo: IconBrandTelegram, username: '@utofy', link: 'https://utofy.t.me' },
-    {logo: IconBrandTelegram, username: '@alpoati - my telegram channel', link: 'https://alpoati.t.me'},
+    { logo: IconBrandTelegram, username: '@alpoati - my telegram channel', link: 'https://alpoati.t.me'},
     { logo: IconBrandInstagram, username: '@utofy', link: 'https://instagram.com/utofy' },
     { logo: IconBrandSoundcloud, username: '@utof', link: 'https://soundcloud.com/utof' },
     { logo: IconHeart, username: 'Support me on ko-fi!!', link: 'https://ko-fi.com/utofy' },
@@ -19,5 +19,8 @@
   {/each}
   <div class="col-span-full text-center mt-4">
     <a href="/test" class="text-blue-500 underline">Go to Test Page</a>
+  </div>
+  <div class="col-span-full text-center mt-4">
+    <a href="/wishlist" class="text-blue-500 underline">Go to Wishlist Page</a>
   </div>
 </div>

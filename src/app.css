@@ -1,1 +1,28 @@
-@import "tailwindcss";
+@import "tailwindcss"; /* Do not fucking do the classic 3 lines as this is new version of tailwind which uses only one line.*/
+
+:root {
+  --primary: #4ecca3;
+  --secondary: #393e46;
+  --accent: #f2f2f2;
+  --background: #eaeaea;
+  --text: #222222;
+
+  --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--background);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+}
+/* 
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white font-bold py-2 px-4 rounded;
+  }
+  .container-custom {
+    @apply mx-auto p-4;
+  }
+} */
