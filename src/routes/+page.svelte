@@ -12,6 +12,8 @@
   
       { logo: IconBrandYoutube, username: 'Youtube @utof', link: 'https://youtube.com/@utof' }
     ];
+
+	import FunRectangles from '$lib/components/FunRectangles.svelte';
   </script>
   
   <div class="grid gap-4 p-4" transition:fade={{ duration: 500 }}>
@@ -20,9 +22,10 @@
     {/each}
     <div class="col-span-full text-center mt-4">
       <a href="/test" class="text-blue-500 underline ">Go to Test Page</a>
-    </div>
+</div>
+
+<FunRectangles />
     <div class="col-span-full text-center mt-4">
       <a href="/wishlist" class="text-blue-500 underline">Wishlist Page</a>
     </div>
   </div>
-  
