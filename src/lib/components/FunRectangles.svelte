@@ -5,23 +5,35 @@
   let ctx;
 
   let rectangles = [];
+  let width;
+  let height;
 
 	onMount(() => {
-    const width = window.innerWidth * 0.2;
-    const height = window.innerHeight * 0.2;
-		canvas.width = width;
-    canvas.height = height;
+
+    const resizeCanvas = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
     ctx = canvas.getContext('2d');
 
     setInterval(() => {
       addRectangle(Math.random() * (width - 50), Math.random() * (height-50), 50, 50);
       drawRectangles();
-    }, 150);
+    }, 50);
 
     setInterval(() => {
       rectangles = [];
       drawRectangles();
     }, 2000)
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    }
 	});
 
   function addRectangle(x, y, width, height) {
@@ -45,7 +57,12 @@
 </div>
 
 <style>
-	canvas {
-		border: 1px solid black;
+	div {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+    z-index: -1;
 	}
 </style>

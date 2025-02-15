@@ -2,6 +2,7 @@
     import Card from '$lib/components/ui/card/Card.svelte';
     import { IconBrandTelegram, IconBrandInstagram, IconBrandSoundcloud, IconHeart, IconBrandYoutube } from '@tabler/icons-svelte';
     import { fade } from 'svelte/transition';
+		import FunRectangles from '$lib/components/FunRectangles.svelte';
   
     const links = [
       { logo: IconBrandTelegram, username: '@utofy', link: 'https://utofy.t.me' },
@@ -13,9 +14,9 @@
       { logo: IconBrandYoutube, username: 'Youtube @utof', link: 'https://youtube.com/@utof' }
     ];
 
-	import FunRectangles from '$lib/components/FunRectangles.svelte';
+	
   </script>
-  
+  <FunRectangles />
   <div class="grid gap-4 p-4" transition:fade={{ duration: 500 }}>
     {#each links as { logo, username, link }}
       <Card {logo} {username} link={link} on:click={() => openLink(link)} />
@@ -24,7 +25,6 @@
       <a href="/test" class="text-blue-500 underline ">Go to Test Page</a>
 </div>
 
-<FunRectangles />
     <div class="col-span-full text-center mt-4">
       <a href="/wishlist" class="text-blue-500 underline">Wishlist Page</a>
     </div>
