@@ -1,6 +1,6 @@
 <script>
     import Card from '$lib/components/ui/card/Card.svelte';
-    import { IconBrandTelegram, IconBrandInstagram, IconBrandSoundcloud, IconHeart } from '@tabler/icons-svelte';
+    import { IconBrandTelegram, IconBrandInstagram, IconBrandSoundcloud, IconHeart, IconBrandYoutube } from '@tabler/icons-svelte';
     import { fade } from 'svelte/transition';
   
     const links = [
@@ -10,6 +10,7 @@
       { logo: IconBrandSoundcloud, username: '@utof', link: 'https://soundcloud.com/utof' },
       { logo: IconHeart, username: 'Support me on ko-fi!!', link: 'https://ko-fi.com/utofy' },
   
+      { logo: IconBrandYoutube, username: 'Youtube @utof', link: 'https://youtube.com/@utof' }
     ];
   </script>
   
@@ -18,10 +19,10 @@
       <Card {logo} {username} link={link} on:click={() => openLink(link)} />
     {/each}
     <div class="col-span-full text-center mt-4">
-      <a href="/test" class="text-blue-500 underline">Go to Test Page</a>
+      <a href="/test" class="text-blue-500 underline ">Go to Test Page</a>
     </div>
     <div class="col-span-full text-center mt-4">
-      <a href="/wishlist" class="text-blue-500 underline">Go to Wishlist Page</a>
+      <a href="/wishlist" class="text-blue-500 underline">Wishlist Page</a>
     </div>
   </div>
   
