@@ -1,4 +1,9 @@
 <script>
+        // TODO toadd(dont delete unless tdone): slight jitter of rectangles, motion blur.
+    // A line is drawn from the previous position to the new position.
+    // start blurring rects slowly after delay of 0.3 secs
+    // less rectangles based on the area of the screen. smaller rects as well.
+	
 	import { onMount } from 'svelte';
 
 	let canvas;

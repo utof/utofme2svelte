@@ -1,8 +1,15 @@
 # Personal Portfolio & Project Hub (SvelteKit)
 
-todo unsorted: why is the localhost loading up and reloading so slowly? What happened? it wasn't like that before.
+todo unsorted:
+[ ] why is the localhost loading up and reloading so slowly? What happened? it wasn't like that before.
+[ ] d3?
+[ ] have a "open source" and its a hyperlink to a github with this exact file.
+[ ] add a "last updated" date at the bottom
+[ ] click thru versions of the page.
+[ ] add mcp for gh...
 
-Todo longterm: add favicon.
+- [ ] other mcps?
+      Todo longterm: add favicon.
 
 DATE: 2/8/2025. v1
 
