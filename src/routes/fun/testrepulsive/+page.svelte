@@ -1,255 +1,255 @@
+
 <script>
-    import { onMount } from 'svelte';
-  
-    let canvas;
-    let context;
-    let animationFrame;
-    let nodes = [];
-    let edges = [];
-    let nodeCount = 10; // default value, but will be randomized on load
-    let optimizationActive = false;
-    let curveStyle = 'bezier'; // radio selection: 'bezier' or 'simple'
-  
-    // Initializes the graph with nodes and random edges.
-    function initGraph() {
-      nodes = [];
-      edges = [];
-      // Randomize the nodeCount on page load, between 2 and 50.
-      nodeCount = Math.floor(Math.random() * (50 - 2 + 1)) + 2;
-      console.log("Initializing graph with " + nodeCount + " nodes");
-  
-      // Create nodes with random positions.
-      for (let i = 0; i < nodeCount; i++) {
-        nodes.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: 0,
-          vy: 0
-        });
-      }
-  
-      // Create random edges between nodes with a chance of connection.
-      // Here every pair has a chance of 20% to be connected.
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          if (Math.random() < 0.2) {
-            edges.push({ source: i, target: j });
-          }
-        }
-      }
-      console.log("Edges generated: ", edges);
-    }
-  
-    // Updates the simulation using a simple force-directed model.
-    function updateSimulation() {
-      if (!optimizationActive) return;
-  
-      const repulsion = 1000;
-      const attraction = 0.1;
-      const dt = 0.016; // time step
-  
-      // Apply repulsive forces between all pairs of nodes.
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          let dx = nodes[j].x - nodes[i].x;
-          let dy = nodes[j].y - nodes[i].y;
-          let distSq = dx * dx + dy * dy + 0.01; // avoid division by zero
-          let force = repulsion / distSq;
-          let angle = Math.atan2(dy, dx);
-          nodes[i].vx -= force * Math.cos(angle) * dt;
-          nodes[i].vy -= force * Math.sin(angle) * dt;
-          nodes[j].vx += force * Math.cos(angle) * dt;
-          nodes[j].vy += force * Math.sin(angle) * dt;
-        }
-      }
-  
-      // Apply attractive (spring-like) forces along edges.
-      for (let e of edges) {
-        let a = nodes[e.source];
-        let b = nodes[e.target];
-        let dx = b.x - a.x;
-        let dy = b.y - a.y;
-        let distance = Math.sqrt(dx * dx + dy * dy);
-        // Spring force: proportional to current distance.
-        let force = attraction * distance;
-        let angle = Math.atan2(dy, dx);
-        a.vx += force * Math.cos(angle) * dt;
-        a.vy += force * Math.sin(angle) * dt;
-        b.vx -= force * Math.cos(angle) * dt;
-        b.vy -= force * Math.sin(angle) * dt;
-      }
-  
-      // Update node positions and add damping.
-      for (let node of nodes) {
-        node.vx *= 0.95;
-        node.vy *= 0.95;
-        node.x += node.vx;
-        node.y += node.vy;
-        // Bounce off the canvas edges.
-        if (node.x < 0 || node.x > canvas.width) {
-          node.vx *= -1;
-          console.log("Node bounce x", node);
-        }
-        if (node.y < 0 || node.y > canvas.height) {
-          node.vy *= -1;
-          console.log("Node bounce y", node);
-        }
-      }
-      console.log("Simulation updated");
-      draw();
-      animationFrame = requestAnimationFrame(updateSimulation);
-    }
-  
-    // Draw the current state of the graph on the canvas.
-    function draw() {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-  
-      // Draw edges.
-      context.lineWidth = 2;
-      context.strokeStyle = "#888";
-      for (let e of edges) {
-        const a = nodes[e.source];
-        const b = nodes[e.target];
-        context.beginPath();
-        context.moveTo(a.x, a.y);
-        if (curveStyle === 'bezier') {
-          // Use a quadratic curve to create a smooth Bezier curve.
-          const midX = (a.x + b.x) / 2;
-          const midY = (a.y + b.y) / 2;
-          const dx = b.x - a.x;
-          const dy = b.y - a.y;
-          // Calculate a perpendicular offset.
-          let normalX = -dy;
-          let normalY = dx;
-          const len = Math.sqrt(normalX * normalX + normalY * normalY) + 0.01;
-          normalX /= len;
-          normalY /= len;
-          const curvature = 30; // factor to adjust curvature
-          const cpX = midX + normalX * curvature;
-          const cpY = midY + normalY * curvature;
-          context.quadraticCurveTo(cpX, cpY, b.x, b.y);
-        } else {
-          // Draw a simple straight line.
-          context.lineTo(b.x, b.y);
-        }
-        context.stroke();
-      }
-  
-      // Draw nodes as circles.
-      context.fillStyle = "#3498db";
-      for (let node of nodes) {
-        context.beginPath();
-        context.arc(node.x, node.y, 8, 0, Math.PI * 2);
-        context.fill();
-      }
-      console.log("Canvas rendered");
-    }
-  
-    // Start the optimization simulation.
-    function startOptimization() {
-      if (!optimizationActive) {
-        optimizationActive = true;
-        console.log("Starting optimization");
-        updateSimulation();
+  import { onMount, onDestroy } from "svelte";
+  import * as THREE from "three";
+
+  let numNodes = 20; // default number of nodes, adjustable via slider (2-50)
+  let scene, camera, renderer;
+  let nodes = [];
+  let edges = []; // Each edge: { source, target, control, line }
+  let fixedNodeIndex = null; // one node will be fixed (highlighted in red)
+  let animationId = null;
+  let simulationRunning = false;
+
+  // Start the optimization simulation (force-directed layout)
+  function startOptimization() {
+    simulationRunning = true;
+    animate();
+  }
+
+  // Stop the simulation
+  function stopOptimization() {
+    simulationRunning = false;
+    if (animationId) cancelAnimationFrame(animationId);
+  }
+
+  // Generates a new random graph and resets the simulation
+  function generateGraph() {
+    nodes = [];
+    edges = [];
+    
+    // If scene already exists, remove all existing children
+    if (scene) {
+      while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
       }
     }
-  
-    // Stop the simulation.
-    function stopOptimization() {
-      optimizationActive = false;
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-      console.log("Stopping optimization");
+    
+    // Create nodes with random positions in the XY-plane (z = 0)
+    for (let i = 0; i < numNodes; i++) {
+      let x = (Math.random() - 0.5) * 100;
+      let y = (Math.random() - 0.5) * 100;
+      let z = 0;
+      nodes.push({
+        position: new THREE.Vector3(x, y, z),
+        velocity: new THREE.Vector3(0, 0, 0),
+        mesh: null
+      });
     }
-  
-    // Reset the graph (stop simulation, reinitialize graph, and redraw).
-    function resetGraph() {
-      stopOptimization();
-      initGraph();
-      draw();
-    }
-  
-    // Handle changes from the node count slider.
-    function handleSliderChange(e) {
-      nodeCount = parseInt(e.target.value);
-      console.log("Slider changed, node count:", nodeCount);
-      // Regenerate the nodes based on the new node count.
-      stopOptimization();
-      nodes = [];
-      edges = [];
-      for (let i = 0; i < nodeCount; i++) {
-        nodes.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: 0,
-          vy: 0
-        });
-      }
-      // Re-generate random edges.
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          if (Math.random() < 0.2) {
-            edges.push({ source: i, target: j });
-          }
-        }
-      }
-      draw();
-    }
-  
-    onMount(() => {
-      canvas = document.getElementById('graphCanvas');
-      context = canvas.getContext('2d');
-      // Set canvas dimensions.
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight - 100;
-      initGraph();
-      draw();
-      console.log("Svelte page loaded: Graph visualization ready");
+    
+    // Select one random node to be fixed (its position will not change)
+    fixedNodeIndex = Math.floor(Math.random() * numNodes);
+    
+    // Visualize nodes as spheres; fixed node is red, others are blue
+    nodes.forEach((node, index) => {
+      const geometry = new THREE.SphereGeometry(2, 16, 16);
+      const material = new THREE.MeshBasicMaterial({
+        color: index === fixedNodeIndex ? 0xff0000 : 0x0000ff
+      });
+      const sphere = new THREE.Mesh(geometry, material);
+      sphere.position.copy(node.position);
+      node.mesh = sphere;
+      scene.add(sphere);
     });
-  </script>
-  
-  <style>
-    canvas {
-      border: 1px solid #ccc;
-      display: block;
-      margin: 0 auto;
+    
+    // Create random edges between nodes - one edge per unordered pair with 20% probability
+    for (let i = 0; i < numNodes; i++) {
+      for (let j = i + 1; j < numNodes; j++) {
+        if (Math.random() < 0.2) {
+          edges.push({
+            source: i,
+            target: j,
+            control: null,
+            line: null
+          });
+        }
+      }
     }
-    .controls {
-      margin: 10px;
-      text-align: center;
+    
+    // For each edge, create a curved line using a quadratic Bezier curve
+    edges.forEach(edge => {
+      const src = nodes[edge.source].position;
+      const tgt = nodes[edge.target].position;
+      const mid = new THREE.Vector3().addVectors(src, tgt).multiplyScalar(0.5);
+      
+      // Compute perpendicular offset in the XY-plane.
+      const dir = new THREE.Vector3().subVectors(tgt, src);
+      const perp = new THREE.Vector3(-dir.y, dir.x, 0).normalize();
+      const offset = perp.multiplyScalar((Math.random() - 0.5) * 20);
+      const control = new THREE.Vector3().addVectors(mid, offset);
+      edge.control = control;
+      
+      // Create a quadratic Bezier curve and generate points for the edge
+      const curve = new THREE.QuadraticBezierCurve3(src, control, tgt);
+      const points = curve.getPoints(50);
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      const material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+      const line = new THREE.Line(geometry, material);
+      edge.line = line;
+      scene.add(line);
+    });
+  }
+
+  // Initialize Three.js scene, camera, and renderer (only runs in the browser)
+  function initScene() {
+    if (typeof window === "undefined") return;
+    const canvas = document.getElementById("canvas");
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(
+      45,
+      canvas.clientWidth / canvas.clientHeight,
+      0.1,
+      1000
+    );
+    camera.position.set(0, 0, 150);
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    generateGraph();
+  }
+
+  // Basic force-directed simulation updating node positions and edge curves
+  function simulate() {
+    const repulsionStrength = 5;
+    const springStrength = 0.01;
+    const damping = 0.85;
+
+    // Update positions of each node (except the fixed node)
+    for (let i = 0; i < numNodes; i++) {
+      if (i === fixedNodeIndex) continue;
+      const node = nodes[i];
+      const force = new THREE.Vector3();
+      
+      // Repulsive forces from every other node
+      for (let j = 0; j < numNodes; j++) {
+        if (i === j) continue;
+        const other = nodes[j];
+        const diff = new THREE.Vector3().subVectors(node.position, other.position);
+        const distSq = diff.lengthSq() + 0.01; // prevent division by zero
+        const rep = diff.normalize().multiplyScalar(repulsionStrength / distSq);
+        force.add(rep);
+      }
+      
+      // Attractive (spring) forces along edges connected to this node
+      edges.forEach(edge => {
+        if (edge.source === i || edge.target === i) {
+          const otherIndex = edge.source === i ? edge.target : edge.source;
+          const other = nodes[otherIndex];
+          const spring = new THREE.Vector3()
+            .subVectors(other.position, node.position)
+            .multiplyScalar(springStrength);
+          force.add(spring);
+        }
+      });
+      
+      // Update velocity and position based on computed force and damping
+      node.velocity.add(force);
+      node.velocity.multiplyScalar(damping);
+      node.position.add(node.velocity);
+      // Enforce planarity: keep z = 0
+      node.position.z = 0;
     }
-    .controls label {
-      margin-right: 10px;
+
+    // Update node mesh positions for rendering
+    nodes.forEach((node) => {
+      if (node.mesh) node.mesh.position.copy(node.position);
+    });
+
+    // Update edge curves based on new node positions
+    edges.forEach(edge => {
+      const src = nodes[edge.source].position;
+      const tgt = nodes[edge.target].position;
+      const mid = new THREE.Vector3().addVectors(src, tgt).multiplyScalar(0.5);
+      const dir = new THREE.Vector3().subVectors(tgt, src);
+      let perp = new THREE.Vector3(-dir.y, dir.x, 0);
+      if (perp.length() === 0) perp = new THREE.Vector3(1, 0, 0);
+      perp.normalize();
+      const randomOffset = perp.multiplyScalar((Math.random() - 0.5) * 5);
+      const targetControl = new THREE.Vector3().addVectors(mid, randomOffset);
+      // Smoothly interpolate between old control and the new target
+      edge.control.lerp(targetControl, 0.1);
+      
+      const curve = new THREE.QuadraticBezierCurve3(src, edge.control, tgt);
+      const points = curve.getPoints(50);
+      edge.line.geometry.setFromPoints(points);
+    });
+  }
+
+  // Main animation loop: update simulation and render the scene
+  function animate() {
+    if (!simulationRunning) return;
+    simulate();
+    renderer.render(scene, camera);
+    animationId = requestAnimationFrame(animate);
+  }
+  
+  // Reset the graph by stopping simulation and generating a new random graph
+  function resetGraph() {
+    stopOptimization();
+    generateGraph();
+    renderer.render(scene, camera);
+  }
+
+  // Handle window resize events in the browser
+  function onWindowResize() {
+    if (typeof window === "undefined") return;
+    const canvas = document.getElementById("canvas");
+    if (!canvas) return;
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  }
+
+  // Execute browser-dependent code in onMount
+  onMount(() => {
+    if (typeof window !== "undefined") {
+      initScene();
+      window.addEventListener("resize", onWindowResize);
     }
-  </style>
-  
-  <canvas id="graphCanvas"></canvas>
-  
+  });
+
+  onDestroy(() => {
+    if (typeof window !== "undefined" && animationId) {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", onWindowResize);
+    }
+  });
+</script>
+
+<style>
+  canvas {
+    display: block;
+    width: 100%;
+    height: 600px;
+    background-color: #f0f0f0;
+  }
+  .controls {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  label {
+    font-weight: bold;
+  }
+</style>
+
+<div>
+  <canvas id="canvas"></canvas>
   <div class="controls">
+    <label for="nodes">Number of Nodes: {numNodes}</label>
+    <input type="range" id="nodes" min="2" max="50" bind:value={numNodes} on:change={resetGraph} />
     <button on:click={startOptimization}>Start Optimization</button>
     <button on:click={stopOptimization}>Stop Optimization</button>
     <button on:click={resetGraph}>Reset Graph</button>
   </div>
-  
-  <div class="controls">
-    <label for="nodeSlider">Number of Nodes (2-50): </label>
-    <input type="range" id="nodeSlider" min="2" max="50" value={nodeCount} on:change={handleSliderChange} />
-    <span>{nodeCount}</span>
-  </div>
-  
-  <div class="controls">
-    <label>Curve Style:</label>
-    <label>
-      <input type="radio" name="curveStyle" value="bezier" bind:group={curveStyle} />
-      Bezier
-    </label>
-    <label>
-      <input type="radio" name="curveStyle" value="simple" bind:group={curveStyle} />
-      Simple
-    </label>
-  </div>
-  
-  <p style="text-align: center; font-weight: bold;">
-    Next Steps: After this implementation, should we proceed with adding a slider to control the degree of bezierness (from 0 for straight lines to 1 for nonlinear Bezier curves) and further interactivity (like adding, removing, and dragging nodes and curves)? Please confirm.
-  </p>
+</div>
